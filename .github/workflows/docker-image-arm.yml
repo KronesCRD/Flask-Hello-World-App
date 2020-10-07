@@ -8,21 +8,31 @@ on:
 
 jobs:
 
-  build:
+  push_to_registry:
 
     runs-on: [self-hosted, linux, ARM]
 
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Login to DockerHub
-      uses: docker/login-action@v1 
-      with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Build the Docker image
-      run: docker build . --file arm32v7.Dockerfile --tag flask-hello-world-app:$GITHUB_SHA
+    - name: Check out the repo
+      uses: actions/checkout@v2
     
-    - name: Push image to DockerHub
-      run: docker push thomaspilz/flask-hello-world-app:$(GITHUB_SHA)
+    - name: Push to Docker Hub
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        repository: thomaspilz/flask-hello-world-app
+        tags: $GITHUB_SHA
+
+
+#    - name: Login to DockerHub
+#      uses: docker/login-action@v1 
+#      with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+#    - name: Build the Docker image
+#      run: docker build . --file arm32v7.Dockerfile --tag flask-hello-world-app:$GITHUB_SHA
+    
+#    - name: Push image to DockerHub
+#      run: docker push thomaspilz/flask-hello-world-app:$(GITHUB_SHA)
