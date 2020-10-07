@@ -8,5 +8,6 @@ FROM arm32v7/python:3.8-alpine
 COPY --from=builder /root/.local/ /root/.local/
 COPY ./app /app
 WORKDIR /app
-CMD ["python3"]
-ENTRYPOINT ["app.py"]
+ENTRYPOINT ["python3"]
+CMD ["app.py"]
+
