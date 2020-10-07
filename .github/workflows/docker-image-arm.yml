@@ -25,4 +25,4 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
     
     - name: Push image to DockerHub
-      run: docker push flask-hello-world-app:latest
+      run: docker push thomaspilz/flask-hello-world-app:latest
