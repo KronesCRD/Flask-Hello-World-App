@@ -18,11 +18,11 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file arm32v7.Dockerfile --tag flask-hello-world-app:latest
     
-    - name: Login to DockerHub
-      uses: docker/login-action@v1 
-      with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-    
-    - name: Push image to DockerHub
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/flask-hello-world-app:latest
+    # - name: Login to DockerHub
+    #  uses: docker/login-action@v1 
+    #  with:
+    #      username: ${{ secrets.DOCKERHUB_USERNAME }}
+    #      password: ${{ secrets.DOCKERHUB_TOKEN }}
+    #
+    # - name: Push image to DockerHub
+    #   run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/flask-hello-world-app:latest
