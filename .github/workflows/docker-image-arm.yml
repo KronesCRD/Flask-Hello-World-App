@@ -10,7 +10,7 @@ jobs:
 
   push_to_registry:
 
-    runs-on: [self-hosted, linux, ARM]
+    runs-on: ubuntu-latest
 
     steps:
     - name: Check out the repo
