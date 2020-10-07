@@ -6,10 +6,10 @@ Simple "Hello World" app written in Python using the Flask framework.
 + amd64.Dockerfile: suitable for most modern devices
 
 User "-f" option in for docker build to specify the Dockerfile to be used:
-```Dockerfile
+```shell
 build -t registry/repo:tag -f amd64.Dockerfile .
 ```
 or
-```Dockerfile
+```shell
 build -t registry/repo:tag -f arm32v7.Dockerfile .
 ```
