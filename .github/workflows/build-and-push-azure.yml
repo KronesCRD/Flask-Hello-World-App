@@ -9,7 +9,7 @@ on:
 jobs:
 
   push_to_registry:
-    runs-on: [self-hosted, linux, X64]
+    runs-on: [self-hosted,linux,X64]
     # Set enviroment variables  
     env:
      AZURE_CR: "thomastestazurecontainerreg.azurecr.io"
@@ -26,7 +26,7 @@ jobs:
 # Build the container image for DockerHub
     - id: build_container_dockerhub
       name: Build the Docker image
-      run: docker build --file amd64.Dockerfile --tag {{ secrets.DOCKERHUB_USERNAME }}/$IMG_NAME:$IMG_TAG .
+      run: docker build --file amd64.Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/$IMG_NAME:$IMG_TAG .
 
 # Login to Dockerhub
     - id: login_dockerhub
@@ -39,7 +39,7 @@ jobs:
 # Push the built Docker image to the Dockerhub registry
     - id: push_dockerhub
       name: Push image to DockerHub
-      run: docker push {{ secrets.DOCKERHUB_USERNAME }}/$IMG_NAME:$IMG_TAG
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/$IMG_NAME:$IMG_TAG
       
 #----------------------------------
 # Build the container image for DockerHub
