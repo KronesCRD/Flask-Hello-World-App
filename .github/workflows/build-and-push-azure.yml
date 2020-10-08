@@ -13,7 +13,6 @@ jobs:
     # Set enviroment variables  
     env:
      AZURE_CR: "thomastestazurecontainerreg.azurecr.io"
-     IMG_TAG: $GITHUB_SHA
      IMG_NAME: "flask-hello-world-app"
      
     steps: 
@@ -26,7 +25,7 @@ jobs:
 # Build the container image for DockerHub
     - id: build_container_dockerhub
       name: Build the Docker image
-      run: docker build --file amd64.Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/$IMG_NAME:$IMG_TAG .
+      run: docker build --file amd64.Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/$IMG_NAME:$GITHUB_SHA .
 
 # Login to Dockerhub
     - id: login_dockerhub
@@ -39,17 +38,26 @@ jobs:
 # Push the built Docker image to the Dockerhub registry
     - id: push_dockerhub
       name: Push image to DockerHub
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/$IMG_NAME:$IMG_TAG
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/$IMG_NAME:$GITHUB_SHA
       
 #----------------------------------
 # Build the container image for DockerHub
     - id: build_container_azure
       name: Build the Docker image (cache will be used and just another tag wil be applied!)
-      run: docker build --file amd64.Dockerfile --tag $AZURE_CR/$IMG_NAME:$IMG_TAG .
-      
+      run: docker build --file amd64.Dockerfile --tag $AZURE_CR/$IMG_NAME:$GITHUB_SHA .
+
+# Login to Azure Container Registry
+    - id: login_azure
+      name: Azure Container Registry Login
+      uses: Azure/docker-login@v1
+      with:
+        username: ${{ secrets.AZURECR_USERNAME_THOMAS }}
+        password: ${{ secrets.AZURECR_PASSWORD_THOMAS }}
+        #login-server: # default is https://index.docker.io/v1/
+
 # Push the built Docker image to the Dockerhub registry
     - id: push_azure
       name: Push image to Azure container registry
-      run: docker push $AZURE_CR/$IMG_NAME:$IMG_TAG
+      run: docker push $AZURE_CR/$IMG_NAME:$GITHUB_SHA
 #----------------------------------
 
