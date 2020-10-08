@@ -12,7 +12,7 @@ jobs:
     runs-on: [self-hosted,linux,X64,test]
     # Set enviroment variables  
     env:
-     AZURE_CR: "https://sebastiantestregistry.azurecr.io"
+     AZURE_CR: "sebastiantestregistry.azurecr.io"
      IMG_NAME: "flask-hello-world-app"
      
     steps: 
@@ -43,7 +43,7 @@ jobs:
 #----------------------------------
 # Build the container image for Azure
     - id: build_container_azure
-      name: Build the Docker image (cache will be used and just another tag wil be applied!)
+      name: Build the Docker image for Azure (cache will be used and just another tag wil be applied!)
       run: docker build --file amd64.Dockerfile --tag $AZURE_CR/$IMG_NAME:$GITHUB_SHA .
 
 # Login to Azure Container Registry
