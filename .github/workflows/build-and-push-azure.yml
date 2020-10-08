@@ -51,7 +51,7 @@ jobs:
       name: Azure Container Registry Login
       uses: Azure/docker-login@v1
       with:
-        username: ${{ secrets.AZURECR_USERNAME_THOMAS }}
+        username: $AZURE_CR
         password: ${{ secrets.AZURECR_PASSWORD_THOMAS }}
         #login-server: # default is https://index.docker.io/v1/
 
