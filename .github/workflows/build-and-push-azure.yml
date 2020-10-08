@@ -32,7 +32,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Build the Docker image
-      run: docker build --file arm32v7.Dockerfile --tag thomaspilz/flask-hello-world-app:$GITHUB_SHA .
+      run: docker build --file amd64.Dockerfile --tag thomaspilz/flask-hello-world-app:$GITHUB_SHA .
     
     - name: Push image to DockerHub
       run: docker push thomaspilz/flask-hello-world-app:$GITHUB_SHA
