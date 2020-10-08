@@ -12,7 +12,7 @@ jobs:
     runs-on: [self-hosted,linux,X64,test]
     # Set enviroment variables  
     env:
-     AZURE_CR: "thomastestazurecontainerreg.azurecr.io"
+     AZURE_CR: "sebastiantestregistry.azurecr.io"
      IMG_NAME: "flask-hello-world-app"
      
     steps: 
@@ -52,8 +52,8 @@ jobs:
       uses: Azure/docker-login@v1
       with:
         login-server: $AZURE_CR
-        username: ${{ secrets.AZURECR_USERNAME_THOMAS }}
-        password: ${{ secrets.AZURECR_PASSWORD_THOMAS }}
+        username: ${{ secrets.AZURECR_USERNAME_BASTI }}
+        password: ${{ secrets.AZURECR_PASSWORD_BASTI }}
         #login-server: # default is https://index.docker.io/v1/
 
 # Push the built Docker image to the Dockerhub registry
