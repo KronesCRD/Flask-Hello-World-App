@@ -1,7 +1,7 @@
 # Flask-Hello-World-App
 Simple "Hello World" app written in Python using the Flask framework.
 
-#### Two Dockerfiles for different architectures
+#### Two Dockerfiles for different architectures:
 + arm32v7.Dockerfile: suitable for Docker builds on Raspberry Pi
 + amd64.Dockerfile: suitable for most modern devices
 
