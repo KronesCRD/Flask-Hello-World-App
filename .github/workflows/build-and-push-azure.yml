@@ -10,12 +10,9 @@ jobs:
 
   push_to_registry:
     runs-on: [self-hosted, linux, X64, ubuntu-18-04-server]
-#
-#    runs-on: ubuntu-latest
-#
     steps:
-#    - name: Check out the repo
-#      uses: actions/checkout@v2
+    - name: Check out the repo
+      uses: actions/checkout@v2
 #    
 #    - name: Push to Docker Hub
 #      uses: docker/build-push-action@v1
@@ -32,7 +29,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Build the Docker image
-      run: docker build --file /github/workspace/amd64.Dockerfile --tag thomaspilz/flask-hello-world-app:$GITHUB_SHA .
+      run: docker build --file amd64.Dockerfile --tag thomaspilz/flask-hello-world-app:$GITHUB_SHA .
     
     - name: Push image to DockerHub
       run: docker push thomaspilz/flask-hello-world-app:$GITHUB_SHA
