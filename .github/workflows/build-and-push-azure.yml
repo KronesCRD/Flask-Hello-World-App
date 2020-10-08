@@ -10,13 +10,13 @@ jobs:
 
   push_to_registry:
     runs-on: [self-hosted, linux, X64]
-    steps:
-# Set enviroment variables  
-    - env:
-        AZURE_CR: "thomastestazurecontainerreg.azurecr.io"
-        IMG_TAG: $GITHUB_SHA
-        IMAGE_NAME: "flask-hello-world-app" 
-
+    # Set enviroment variables  
+    env:
+     AZURE_CR: "thomastestazurecontainerreg.azurecr.io"
+     IMG_TAG: $GITHUB_SHA
+     IMAGE_NAME: "flask-hello-world-app"
+     
+    steps: 
 # Checkout the repository
     - id: checkout_repo
       name: Check out the repo
