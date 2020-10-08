@@ -12,7 +12,7 @@ jobs:
     runs-on: [self-hosted,linux,X64,test]
     # Set enviroment variables  
     env:
-     AZURE_CR: "sebastiantestregistry.azurecr.io"
+     AZURE_CR: "https://sebastiantestregistry.azurecr.io"
      IMG_NAME: "flask-hello-world-app"
      
     steps: 
