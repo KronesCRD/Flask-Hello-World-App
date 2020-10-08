@@ -41,7 +41,7 @@ jobs:
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/$IMG_NAME:$GITHUB_SHA
       
 #----------------------------------
-# Build the container image for DockerHub
+# Build the container image for Azure
     - id: build_container_azure
       name: Build the Docker image (cache will be used and just another tag wil be applied!)
       run: docker build --file amd64.Dockerfile --tag $AZURE_CR/$IMG_NAME:$GITHUB_SHA .
@@ -51,7 +51,8 @@ jobs:
       name: Azure Container Registry Login
       uses: Azure/docker-login@v1
       with:
-        username: $AZURE_CR
+        login-server: $AZURE_CR
+        username: ${{ secrets.AZURECR_USERNAME_THOMAS }}
         password: ${{ secrets.AZURECR_PASSWORD_THOMAS }}
         #login-server: # default is https://index.docker.io/v1/
 
