@@ -14,17 +14,12 @@ jobs:
     env:
      AZURE_CR: "thomastestazurecontainerreg.azurecr.io"
      IMG_NAME: "flask-hello-world-app"
-     IMG_FULL_NAME_DOCKERHUB: ${{ join([${{ secrets.DOCKERHUB_USERNAME_THOMAS }}, "/", $IMG_NAME, ":", $GITHUB_SHA]) }}
-     IMG_IDENT_AZURE_CR: ${{ join([$AZURE_CR, "/", $IMG_NAME, ":", $GITHUB_SHA]) }}
     steps: 
 # Checkout the repository
     - id: checkout_repo
       name: Check out the repo
       uses: actions/checkout@v2
-
-    - id: test
-      name: TO BE REMOVED Just a test
-      run: echo $IMG_FULL_NAME_DOCKERHUB
+      
 #----------------------------------
 # Build the container image for DockerHub
     - id: build_container_dockerhub
