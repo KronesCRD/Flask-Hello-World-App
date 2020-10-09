@@ -36,7 +36,7 @@ jobs:
 # Push the built Docker image to the Dockerhub registry
     - id: push_dockerhub
       name: Push image to DockerHub
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/$IMG_NAME:$GITHUB_SHA
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA
       
 #----------------------------------
 # Tag the image to be used for Azure
