@@ -42,7 +42,7 @@ jobs:
 # Tag the image to be used for Azure
     - id: tag_container_azure
       name: tag the previously built image for dockerhub, so the identical image (same hash!) will just be tagged again and can then be pushed to the ACR
-      run: docker tag {{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA $AZURE_CR/$IMG_NAME:$GITHUB_SHA
+      run: docker tag ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA $AZURE_CR/$IMG_NAME:$GITHUB_SHA
 
 # Login to Azure Container Registry
     - name: Login to ACR
