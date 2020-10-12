@@ -86,9 +86,9 @@ jobs:
             # GITHUB_CR_LOCAL will only be accessible in this step!
             GITHUB_CR_LOCAL=ghcr.io/${{ github.repository }}
             # Change all uppercase to lowercase
-            GITHUB_CR_LOCAL=$(echo $GITHUB_CR | tr '[A-Z]' '[a-z]')
+            GITHUB_CR_LOCAL=$(echo $GITHUB_CR_LOCAL | tr '[A-Z]' '[a-z]')
             # Create a enviroment variable GITHUB_CR to be used in a later step to push the image (no need to do the conversion to lowercase twice!)
-            echo "GITHUB_CR=$GITHUB_CR_TEMP" >> $GITHUB_ENV
+            echo "GITHUB_CR=$GITHUB_CR_LOCAL" >> $GITHUB_ENV
             docker tag ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA $GITHUB_CR_LOCAL:$GITHUB_SHA
       
       # Authenticate/ Login to the Github Container Registry
