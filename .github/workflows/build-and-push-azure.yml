@@ -96,6 +96,9 @@ jobs:
       # Push the image to the Github Container Registry
       - name: Push image to Github Container Registry
         id: push_github_cr
-        run: docker push $GITHUB_CR:$GITHUB_SHA 
+        run: |
+            echo $GITHUB_SHA
+            echo $GITHUB_CR
+            docker push $GITHUB_CR:$GITHUB_SHA 
             
 
