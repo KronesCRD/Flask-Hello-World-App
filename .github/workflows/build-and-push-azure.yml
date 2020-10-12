@@ -83,7 +83,7 @@ jobs:
       - name: Tag image with Github Container Registry URL
         id: tag_gcr
         run: |
-            GITHUB_CR=ghcr.io/kronescrd/${{ github.repository }}
+            GITHUB_CR=ghcr.io/${{ github.repository }}
             # Change all uppercase to lowercase
             GITHUB_CR=$(echo $GITHUB_CR | tr '[A-Z]' '[a-z]')
             docker tag ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA $GITHUB_CR/$IMG_NAME:$GITHUB_SHA
