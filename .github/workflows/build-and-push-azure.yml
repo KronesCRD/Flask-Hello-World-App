@@ -5,15 +5,15 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+# Set enviroment variables  
+env:
+  AZURE_CR: "thomastestazurecontainerreg.azurecr.io"
+  IMG_NAME: "flask-hello-world-app"
 
 jobs:
   checkout_and_build:
     name: Checkout code and build the container image
     runs-on: [self-hosted,linux,X64,test]
-    # Set enviroment variables  
-    env:
-     AZURE_CR: "thomastestazurecontainerreg.azurecr.io"
-     IMG_NAME: "flask-hello-world-app"
     steps: 
 # Checkout the repository
     - id: checkout_repo
