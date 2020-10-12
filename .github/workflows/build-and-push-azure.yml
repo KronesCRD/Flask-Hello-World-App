@@ -49,19 +49,20 @@ jobs:
         run: docker push ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA
       
 #----------------------------------
-#  push_to_azure_cr:
-#    name: Push image to Azure Container Registry
-#    # Dependency: Code must first be checked out and image must be built
-#    needs: [checkout_and_build]
-#    runs-on: [self-hosted,linux,X64,test]
-#    steps:
+  push_to_azure_cr:
+    name: Push image to Azure Container Registry
+    # Dependency: Code must first be checked out and image must be built
+    needs: [checkout_and_build]
+    runs-on: [self-hosted,linux,X64,test]
+    steps:
 # Tag the image to be used for Azure
-#      - id: tag_container_azure
-#        name: Tag image with Azure Container Registry URL
-#        run: docker tag ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA $AZURE_CR/$IMG_NAME:$GITHUB_SHA
+      - id: tag_container_azure
+        name: Tag image with Azure Container Registry URL
+        run: docker tag ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA $AZURE_CR/$IMG_NAME:$GITHUB_SHA
 #
 # Login to Azure Container Registry using the Docker login action
 #      - name: Azure Container Registry Login
+#      - id: login_azure_cr
 #        uses: Azure/docker-login@v1
 #        with:
 #          # Container registry username
@@ -70,11 +71,16 @@ jobs:
 #          password: ${{ secrets.AZURECR_PASSWORD_THOMAS }}
 #          # Container registry server url
 #          login-server: $AZURE_CR
-#    
+#
+# Login to Azure container registry using the CLI
+      - id: login_azure_cr
+        name: Login to Azure Container Registry
+        run: echo "${{ secrets.AZURECR_PASSWORD_THOMAS }}" | docker login --username ${{ secrets.AZURECR_USERNAME_THOMAS }} --password-stdin $AZURE_CR
+        
 # Push the built Docker image to the Dockerhub registry
-#      - id: push_azure
-#        name: Push image to Azure container registry
-#        run: docker push $AZURE_CR/$IMG_NAME:$GITHUB_SHA
+      - id: push_azure
+        name: Push image to Azure container registry
+        run: docker push $AZURE_CR/$IMG_NAME:$GITHUB_SHA
 #----------------------------------
   push_to_github_cr:
     name: Push image to Github Container Registry
