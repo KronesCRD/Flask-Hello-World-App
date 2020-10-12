@@ -7,7 +7,8 @@ on:
     branches: [ main ]
 
 jobs:
-  push_to_registry:
+  checkout_and_build:
+    name: Checkout code and build the container image
     runs-on: [self-hosted,linux,X64,test]
     # Set enviroment variables  
     env:
@@ -19,53 +20,82 @@ jobs:
       name: Check out the repo
       uses: actions/checkout@v2
       
-#----------------------------------
 # Build the container image for DockerHub
     - id: build_container_dockerhub
       name: Build the Docker image
       run: docker build --file amd64.Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA .
-
+ 
+# Run all the pushes in parallel after build has finished! (NEEDS keyword!) 
+#---------------------------------- 
+  push_to_dockerhub:
+    name: Push image to DockerHub
+    # Dependency: Code must first be checked out and image must be built
+    needs: [checkout_and_build]
+    runs-on: [self-hosted,linux,X64,test]
 # Login to Dockerhub
-    - id: login_dockerhub
-      name: Login to DockerHub
-      uses: docker/login-action@v1 
-      with:
-          username: ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD_THOMAS }}
+    steps:
+      - id: login_dockerhub
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+            username: ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}
+            password: ${{ secrets.DOCKERHUB_PASSWORD_THOMAS }}
 
 # Push the built Docker image to the Dockerhub registry
-    - id: push_dockerhub
-      name: Push image to DockerHub
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA
+      - id: push_dockerhub
+        name: Push image to DockerHub
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA
       
 #----------------------------------
+#  push_to_azure_cr:
+#    name: Push image to Azure Container Registry
+#    # Dependency: Code must first be checked out and image must be built
+#    needs: [checkout_and_build]
+#    runs-on: [self-hosted,linux,X64,test]
+#    steps:
 # Tag the image to be used for Azure
-    - id: tag_container_azure
-      name: tag the previously built image for dockerhub, so the identical image (same hash!) will just be tagged again and can then be pushed to the ACR
-      run: docker tag ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA $AZURE_CR/$IMG_NAME:$GITHUB_SHA
-
+#      - id: tag_container_azure
+#        name: Tag image with Azure Container Registry URL
+#        run: docker tag ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA $AZURE_CR/$IMG_NAME:$GITHUB_SHA
+#
 # Login to Azure Container Registry using the Docker login action
-#    - name: Login to ACR
-#      uses: docker/login-action@v1
-#      with:
-#        registry: $AZURE_CR
-#        username: ${{ secrets.AZURECR_USERNAME_THOMAS }}
-#        password: ${{ secrets.AZURECR_PASSWORD_THOMAS }}
-
-# Login to Azure Container Registry using the Docker login action
-    - name: Azure Container Registry Login
-      uses: Azure/docker-login@v1
-      with:
-        # Container registry username
-        username: ${{ secrets.AZURECR_USERNAME_THOMAS }}
-        # Container registry password
-        password: ${{ secrets.AZURECR_PASSWORD_THOMAS }}
-        # Container registry server url
-        login-server: $AZURE_CR
-    
+#      - name: Azure Container Registry Login
+#        uses: Azure/docker-login@v1
+#        with:
+#          # Container registry username
+#          username: ${{ secrets.AZURECR_USERNAME_THOMAS }}
+#          # Container registry password
+#          password: ${{ secrets.AZURECR_PASSWORD_THOMAS }}
+#          # Container registry server url
+#          login-server: $AZURE_CR
+#    
 # Push the built Docker image to the Dockerhub registry
-    - id: push_azure
-      name: Push image to Azure container registry
-      run: docker push $AZURE_CR/$IMG_NAME:$GITHUB_SHA
+#      - id: push_azure
+#        name: Push image to Azure container registry
+#        run: docker push $AZURE_CR/$IMG_NAME:$GITHUB_SHA
 #----------------------------------
+  push_to_github_cr:
+    name: Push image to Github Container Registry
+    # Dependency: Code must first be checked out and image must be built
+    needs: [checkout_and_build]
+    runs-on: [self-hosted,linux,X64,test]
+    steps:
+      - name: Tag image with Github Container Registry URL
+        id: tag_gcr
+        run: |
+            GITHUB_CR=ghcr.io/kronescrd/${{ github.repository }}
+            # Change all uppercase to lowercase
+            GITHUB_CR=$(echo $GITHUB_CR | tr '[A-Z]' '[a-z]')
+            docker tag ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA $GITHUB_CR/$IMG_NAME:$GITHUB_SHA
+      
+      # Authenticate/ Login to the Github Container Registry
+      - name: Login to the Githuab Container Registry using a personal access token
+        id: login_github_cr
+        run: echo "${{ secrets.PAT_THOMAS }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+      
+      # Push the image to the Github Container Registry
+      - name: Push image to Github Container Registry
+        id: push_github_cr
+        run: docker push $GITHUB_CR/$IMG_NAME:$GITHUB_SHA 
+            
 
