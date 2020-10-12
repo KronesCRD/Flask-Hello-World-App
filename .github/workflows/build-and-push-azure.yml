@@ -86,7 +86,7 @@ jobs:
             GITHUB_CR=ghcr.io/${{ github.repository }}
             # Change all uppercase to lowercase
             GITHUB_CR=$(echo $GITHUB_CR | tr '[A-Z]' '[a-z]')
-            docker tag ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA $GITHUB_CR/$IMG_NAME:$GITHUB_SHA
+            docker tag ${{ secrets.DOCKERHUB_USERNAME_THOMAS }}/$IMG_NAME:$GITHUB_SHA $GITHUB_CR:$GITHUB_SHA
       
       # Authenticate/ Login to the Github Container Registry
       - name: Login to the Githuab Container Registry using a personal access token
@@ -96,6 +96,6 @@ jobs:
       # Push the image to the Github Container Registry
       - name: Push image to Github Container Registry
         id: push_github_cr
-        run: docker push $GITHUB_CR/$IMG_NAME:$GITHUB_SHA 
+        run: docker push $GITHUB_CR:$GITHUB_SHA 
             
 
