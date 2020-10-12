@@ -85,7 +85,7 @@ jobs:
         run: |
             # GITHUB_CR_LOCAL will only be accessible in this step!
             GITHUB_CR_LOCAL=ghcr.io/${{ github.repository }}
-            # Change all uppercase to lowercase
+            # Change all uppercase to lowercase as repository names are only allowed to be lowercase
             GITHUB_CR_LOCAL=$(echo $GITHUB_CR_LOCAL | tr '[A-Z]' '[a-z]')
             # Create a enviroment variable GITHUB_CR to be used in a later step to push the image (no need to do the conversion to lowercase twice!)
             echo "GITHUB_CR=$GITHUB_CR_LOCAL" >> $GITHUB_ENV
@@ -99,6 +99,6 @@ jobs:
       # Push the image to the Github Container Registry
       - name: Push image to Github Container Registry
         id: push_github_cr
-        run: docker push GITHUB_CR:$GITHUB_SHA 
+        run: docker push $GITHUB_CR:$GITHUB_SHA 
             
 
