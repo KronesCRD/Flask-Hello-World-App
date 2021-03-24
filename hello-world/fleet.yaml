@@ -1,0 +1,9 @@
+helm:
+  chart: .
+  releaseName: "fleet-flask-hello-world"
+  values: 
+    ingress:
+      enabled: true
+      hosts:
+        - host: "fleet-flask-hello-world.poc-applications.plgrnd.be"
+          path: "/"
