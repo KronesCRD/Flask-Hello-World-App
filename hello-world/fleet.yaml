@@ -6,4 +6,5 @@ helm:
       enabled: true
       hosts:
         - host: "fleet-flask-hello-world.poc-applications.plgrnd.be"
-          path: "/"
+          paths: 
+            - path: "/"
